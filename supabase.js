@@ -1,0 +1,5 @@
+const SUPABASE_URL = "https://mcbsfmuzaqhoruplptev.supabase.co";
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jYnNmbXV6YXFob3J1cGxwdGV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDc0MDI1MzcsImV4cCI6MTk2Mjk3ODUzN30.pH2u_6i7rXkpeNKGr4xH7C1hP7ME3sQlYnAZqsUA3pE';
+
+
+export default supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
