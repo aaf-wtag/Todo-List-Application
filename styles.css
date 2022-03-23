@@ -1,1 +1,345 @@
+html {
+    box-sizing: border-box;
+  }
+  
+  *, *::before, *::after {
+    box-sizing: inherit;
+    margin: 0;
+    margin: 0;
+  }
 
+body {
+    font-family: Roboto, sans-serif;
+    line-height: 1.4;
+}
+
+.container
+{
+    width: 1512px;
+    max-width: 1512px;
+    /* margin: 0 auto; */
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 90vh;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    margin-left: 150px;
+    /* margin-right: 150px; */
+    max-height: 982px;
+    overflow-y: auto;
+}
+
+.top-panel
+{
+    box-sizing: inherit;
+    display: inline;
+    height: 72px;
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    top: 0%;
+    bottom: 0%;
+
+    margin-left: 150px;
+    margin-right: 150px;
+    background: #FFFFFF;
+    border: 1px solid #DDE2FF
+}
+
+.app-logo
+{
+    display: inline;
+    position: absolute;
+    width: 33.95px;
+    height: 33.98px;
+    margin-left: 150px;
+    margin-top: 19px;
+    /* margin-bottom: 19px; */
+ 
+}
+
+.app-title
+{
+    position: absolute;
+    display: inline;
+    width: 99px;
+    height: 42px;
+    margin-left: 198px;
+    margin-top: 15px;
+    /* margin-bottom: 15px; */
+    display: inline;
+    font-family: Roboto, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 42px;
+    color: #7A8DFD;
+}
+
+#title
+{
+    display: inline;
+    font-family: Roboto, sans-serif;
+    font-style: normal; 
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 42px;
+    color: #7A8DFD;
+}
+
+#search-button
+{
+    position: absolute;
+    display: inline;
+    width: 23.82px;
+    height: 24px;
+    margin-left: 1339px;
+    /* margin-right: 150px; */
+    margin-top: 24px;
+    /* margin-bottom: 24px; */
+}
+
+.label
+{
+    position: absolute;
+    width: 351px;
+    height: 35px;
+    left: 0%;
+    right: 0%;
+    top: 0%;
+    bottom: 0%;
+
+    margin-left: 150px;
+    /* margin-right: 1011px; */
+    margin-top: 137px;
+    /* margin-bottom: 810px; */
+}
+
+#label-text
+{
+    font-family: Roboto, sans-serif;
+    position: absolute;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 35px;
+
+    margin-left: 150px;
+    margin-top: 65px;
+    
+    color: #32394B;;
+}
+
+.initial-buttons
+{
+    position: absolute;
+    font-family: Roboto, sans-serif;
+    font-style: normal;
+    text-align: center;
+    display: inline-block;
+    margin-top: 128px;
+}
+
+#create-button
+{
+    /* font-family: Roboto;
+    font-style: normal;
+    text-align: center; */
+    width: 104px;
+    height: 36px;
+    color: #FFFFFF;
+    position: absolute;
+    background: #7A8DFD;
+    border-radius: 5px;
+    margin-left: 150px;
+    /* padding-top: 8px;
+    padding-bottom: 8px;  
+    padding-right: 5px;
+    padding-left: 5px;    */
+}
+
+#all-button
+{
+    /* display: inline-block; */
+    width: 48px;
+    height: 36px;
+    border-radius: 5px;
+    position: absolute;
+    background: #FFFFFF;
+    margin-left: 1062px;
+}
+
+#incomplete-button
+{
+    /* display: inline-block; */
+    width: 111px;
+    height: 36px;
+    border-radius: 5px;
+    position: absolute;
+    background: #FFFFFF;
+    margin-left: 1129px;
+}
+
+#complete-button
+{
+    width: 104px;
+    height: 36px;
+    border-radius: 5px;
+    position: absolute;
+    background: #FFFFFF;
+    margin-left: 1259px;
+}
+
+
+/* Confusion about where and how to use flexbox */
+
+.todo-cards
+{
+    display: flex;
+    flex-wrap: wrap;
+    flex: 382px; 
+    position: absolute;
+    display: flex;
+    font-family: Roboto, 'sans-serif';
+    margin-left: 150px;
+    /* margin-right: 150px; */
+    margin-top: 270px;
+    
+    /* flex-direction: row-reverse;  */
+}
+
+.card-item
+{
+    background: #FFFFFF;
+    border: 1px solid #DDE2FF;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding-right: 16px;
+    padding-left: 16px;
+    padding-top:15px;
+    padding-bottom: 19px;
+}
+
+.input-text
+{
+    font-family: Roboto, 'sans-serif';
+    font-size: 20px;
+    background: #FFFFFF;
+    border: 1px solid #DDE2FF;
+    box-sizing: border-box;
+    border-radius: 5px;
+    width: 351px;
+    height: 80px;
+}
+
+.uneditable-text
+{
+    font-family: Roboto, 'sans-serif';
+    font-size: 20px;
+    background: #FFFFFF;
+    /* border: 1px solid #DDE2FF; */
+    box-sizing: border-box;
+    /* border-radius: 5px; */
+    width: 351px;
+    height: 80px;
+}
+
+.todo-buttons
+
+{
+    padding-top: 12px;
+    padding-left: 16px;
+}
+
+.add-task-button
+{
+    width: 91px;
+    height: 36px;
+    border-radius: 5px;
+    background: #FFFFFF;
+}
+
+.delete-button
+{
+    display: inline-block;
+    /* align-content: center; */
+    width: 24px;
+    height: 19px;
+    margin-right: 26px;
+    margin-top: 26px;
+}
+
+.done-button
+{
+    display: inline-block;
+    width: 24px;
+    height: 19px;
+    margin-right: 26px;
+    margin-top: 26px;
+}
+
+.edit-button
+{
+    display: inline-block;
+    width: 24px;
+    height: 19px;
+    margin-right: 26px;
+    margin-top: 26px;
+}
+
+.timestamp
+{
+    display: "block";
+    font-family: Roboto, 'sans-serif';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    color: #BBBDD0;
+    background: #FFFFFF;
+    box-sizing: border-box;
+    width: 121px;
+    height: 16px;
+    margin-top: 9px;
+}
+
+.save-button
+{
+    display: inline-block;
+    width: 63px;
+    height: 36px;
+    border-radius: 5px;
+    background: #FFFFFF;
+}
+
+.duration-text
+{
+    display: inline-block;
+    font-family: Roboto, 'sans-serif';
+    font-size: 12px;
+    color: #FFFFFF;
+    background: #7A8DFD;
+    border: 1px solid #DDE2FF;
+    box-sizing: border-box;
+    border-radius: 5px;
+    width: 134px;
+    height: 24px;
+    margin-left: 200px;
+    padding-top: 5px;
+    padding-left: 12px;
+}
+
+.completed-text
+{
+    font-family: Roboto, 'sans-serif';
+    font-size: 20px;
+    color: #0BC375;
+    background: #FFFFFF;
+    text-decoration: line-through;
+    /* border: 1px solid #DDE2FF; */
+    box-sizing: border-box;
+    /* border-radius: 5px; */
+    width: 351px;
+    height: 80px;
+
+}
