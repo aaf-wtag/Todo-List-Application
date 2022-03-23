@@ -1,1 +1,43 @@
+<!DOCTYPE html>
 
+<html lang="en">
+    <head>
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <link href="styles.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+        
+        <title>Todos</title>
+    </head>
+
+    <main>
+        <div class="container">
+            <div class="top-panel">
+                <div class="app-logo">
+                    <img src="images/logo.svg" alt="todos logo">
+                </div>
+                <div class="app-title">
+                    <pre id="title">Todos</pre>
+                </div>
+                <div id="search-button">
+                    <input type="image" src="images/search.svg" alt="search button">
+                </div>    
+            </div>
+
+            <pre id="label-text">Add Task</pre>
+            
+            <div class="initial-buttons">
+                <button id="create-button" type="button"><img src="images/create.svg">Create</button>
+                <button id="all-button" type="button">All</button>  
+                <button id="incomplete-button" type="button">Incomplete</button>  
+                <button id="complete-button" type="button">Complete</button>  
+            </div>
+
+            <div class="todo-cards">                
+            </div>
+            
+        </div>
+    </main>
+
+    <script src="script.js" type="module"></script>
+
+</html>
