@@ -1,12 +1,13 @@
 import supabase from "./supabase.js";
 
-export async function getFromDB()
+export async function getFromDB(text)
 {
-  
   const { data, error } = await supabase
-          .from('todo_table')
-          .select();
-
+    .from('todo_table')
+    .select()
+    .ilike('text', `%${text}%`)
+    .order('created_at', { ascending: false });
+          
   return {error, data};
 }
 
@@ -30,40 +31,55 @@ export async function deleteFromDB(id)
 export async function updateSavedState(id, val)
 {
   const { data, error } = await supabase
-  .from('todo_table')
-  .update({ saved: val })
-  .match({ id: id });
-}
+    .from('todo_table')
+    .update({ saved: val })
+    .match({ id: id });
+  }
 
 export async function updateCompletedState(id, val)
 {
   const { data, error } = await supabase
-  .from('todo_table')
-  .update({ completed: val })
-  .match({ id: id });
+    .from('todo_table')
+    .update({ completed: val })
+    .match({ id: id });
 }
 
 export async function updateText(id, val)
 {
   const { data, error } = await supabase
-  .from('todo_table')
-  .update({ text: val })
-  .match({ id: id });
+    .from('todo_table')
+    .update({ text: val })
+    .match({ id: id });
 }
 
 export async function updateCompletedAt(id, val)
 {
   const { data, error } = await supabase
-  .from('todo_table')
-  .update({ completed_at: val })
-  .match({ id: id });
+    .from('todo_table')
+    .update({ completed_at: val })
+    .match({ id: id });
 }
 
-// export async function getCompletedAt(id)
-// {
-//   const { data, error } = await supabase
-//           .from('todo_table')
-//           .select('completed_at')
-//           .match({id: id});
-//   return {data, error};
-// }
+export async function getIncompleteData(text)
+{
+  const { data, error } = await supabase
+    .from('todo_table')
+    .select()
+    .match({completed : false})
+    .ilike('text', `%${text}%`)
+    .order('created_at', { ascending: false });
+
+  return {error, data};
+}
+
+export async function getCompleteData(text)
+{
+  const { data, error } = await supabase
+    .from('todo_table')
+    .select()
+    .match({completed : true})
+    .ilike('text', `%${text}%`)
+    .order('created_at', { ascending: false });
+
+  return {error, data};
+}
