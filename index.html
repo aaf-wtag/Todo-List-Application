@@ -1,1 +1,53 @@
+<!DOCTYPE html>
 
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible", content="IE-edge"/>
+        <title>Todos</title>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+
+        <link href="./styles.css" rel="stylesheet"/>        
+    </head>
+
+    <!-- <main> -->
+    <body>
+        <div class="top-panel">
+            <div class="app-logo">
+                <img src="images/logo.svg" alt="todos logo">
+            </div>
+            <div class="app-title">
+                <pre id="title">Todos</pre>
+            </div>
+            <div class="search">
+                <input type="text" id="search-field"/>
+                <input type="image" id="search-button" src="images/search.svg" alt="search button"/>
+            </div>    
+        </div>
+        
+        <div class="container">
+            <pre id="label-text">Add Task</pre>
+            
+            <div class="initial-buttons">
+                <button id="create-button" type="button"><img src="images/create.svg">Create</button>
+                <button id="all-button" type="button">All</button>  
+                <button id="incomplete-button" type="button">Incomplete</button>  
+                <button id="complete-button" type="button">Complete</button>  
+            </div>
+
+            <div class="todo-cards">                
+            </div>
+            
+        </div>
+
+    </body>
+    <!-- </main> -->
+
+    <script src="script.js" type="module"></script>
+
+</html>
