@@ -2,27 +2,35 @@
 
 <html lang="en">
     <head>
-        <meta name="viewport" content="initial-scale=1, width=device-width">
-        <link href="styles.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-        
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible", content="IE-edge"/>
         <title>Todos</title>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+
+        <link href="./styles.css" rel="stylesheet"/>        
     </head>
 
-    <main>
-        <div class="container">
-            <div class="top-panel">
-                <div class="app-logo">
-                    <img src="images/logo.svg" alt="todos logo">
-                </div>
-                <div class="app-title">
-                    <pre id="title">Todos</pre>
-                </div>
-                <div id="search-button">
-                    <input type="image" src="images/search.svg" alt="search button">
-                </div>    
+    <!-- <main> -->
+    <body>
+        <div class="top-panel">
+            <div class="app-logo">
+                <img src="images/logo.svg" alt="todos logo">
             </div>
-
+            <div class="app-title">
+                <pre id="title">Todos</pre>
+            </div>
+            <div class="search">
+                <input type="text" id="search-field"/>
+                <input type="image" id="search-button" src="images/search.svg" alt="search button"/>
+            </div>    
+        </div>
+        
+        <div class="container">
             <pre id="label-text">Add Task</pre>
             
             <div class="initial-buttons">
@@ -36,7 +44,9 @@
             </div>
             
         </div>
-    </main>
+
+    </body>
+    <!-- </main> -->
 
     <script src="script.js" type="module"></script>
 
