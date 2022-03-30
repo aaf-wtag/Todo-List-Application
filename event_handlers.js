@@ -7,11 +7,11 @@ export async function addTodo()
     const text = input.value.trim(); // trim white spaces in the text
     //console.log(text);
 
+    // Cannot create a card with empty text field
     if (text != "")
     {
         await insertIntoDB(text, false, true);
-        // setTimeout(renderAllData, 100); // provide some time for database update before rendering
-        renderAllData();
+        renderAllData("");
     }
 
 }
@@ -31,6 +31,7 @@ export async function editTodo(todo)
     const duration_text = document.getElementById(`duration_text_${todo.id}`);
 
     display_text.contentEditable = true;
+    display_text.setAttribute('class', 'input-text');
     save_button.style.display = "inline-block";
     done_button.style.display = "none";
     edit_button.style.display = "none";
@@ -47,6 +48,8 @@ export async function saveTodo(todo)
     // Obtaining the text
     const display_text = document.getElementById(`display_text_${todo.id}`);
     display_text.contentEditable = false;
+    display_text.removeAttribute('class');
+    display_text.setAttribute('class', 'uneditable-text');
     todo.text = display_text.textContent;
     // console.log(todo.text);
     
@@ -76,13 +79,6 @@ export async function completeTodo(todo)
     const completion_time = new Date(Date.now());
     await updateCompletedAt(todo.id, completion_time);
 
-    // Computing elapsed time rounded in days
-    // const { completed_at, error } = await getCompletedAt(todo.id);
-
-    // if (error)
-    // {
-    //     throw new Error("Error while getting completed_at");
-    // }
 
     const elapsed_time = calculateElapsedTime(todo.created_at, completion_time);
 
@@ -115,10 +111,10 @@ export function calculateElapsedTime(startDateString, endDate)
     const start = new Date(startDateString);
     const end = new Date(endDate);
 
-    const start_ms = Number(start);
+    const start_ms = Number(start); 
     const end_ms = Number(end);
 
-    return Math.round((end_ms - start_ms) / (24 * 60 * 60 * 1000));
+    return Math.round((end_ms - start_ms) / (24 * 60 * 60 * 1000)); // converting the milliseconds to days (rounded)
 
 }
 
