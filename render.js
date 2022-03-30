@@ -1,9 +1,9 @@
-import { getFromDB } from "./db_calls.js"
+import { getCompleteData, getFromDB, getIncompleteData } from "./db_calls.js"
 import { addTodo, calculateElapsedTime, completeTodo, deleteTodo, editTodo, saveTodo } from "./event_handlers.js"
 
+const limit = 6; // number of cards to be displayed without pressing "Load More"
 
-// converts a given timestamp in milliseconds since Jan 1, 1970
-// to the given date format
+// converts a given dateString from DB to the given date format
 function toDateString(dateString)
 {
     const [year, month, day] = dateString.split("T")[0].split('-');   
@@ -54,6 +54,7 @@ export function renderOnCreate()
 
         // followed by the event handler for the Add Task button 
         add_task_button.addEventListener('click', () => {
+            add_task_button.disabled = true; // diasble the add task button so that multiple clicks don't create multiple cards
             addTodo();
             isCreateEnabled = true;
         });
@@ -89,7 +90,7 @@ export function renderOnCreate()
 
 }
 
-export async function renderAllData()
+export async function renderAllData(search_text)
 {
     // selecting the todo card div containing all the cards
     const todo_cards = document.querySelector('.todo-cards'); 
@@ -101,19 +102,124 @@ export async function renderAllData()
     }
 
     // fetching the card data from the DB
-    const {error, data} = await getFromDB();
+    const {error, data} = await getFromDB(search_text);
 
     if(error)
     {
-        throw new Error("Error while getting all data");
+        throw new Error("Error while getting filtere data");
     }
 
-    // console.log(data);
+    // setting initial as the minimum of data.length and limit
+    const initial = (data.length > limit) ? limit : data.length;
 
-    // rendering each data
-    data.forEach(todo => {
+    for (let i = 0; i < initial; ++i)
+    {
+        let todo = data[i];
         createCard(todo);
-    });
+    }
+
+    // all button activated
+    const all_button = document.querySelector('#all-button');
+    if (all_button.disabled === true) all_button.disabled = false;
+
+    // load more button created if there are more cards than initial limit
+    if (initial < data.length)
+    {
+        const load_more = document.createElement("div");
+        load_more.setAttribute('class', 'load-more');
+
+
+        const load_more_button = document.createElement("button");
+        load_more_button.setAttribute('id', 'load-more-button');
+        load_more_button.appendChild(document.createTextNode("Load More"));
+    
+        load_more.appendChild(load_more_button);
+
+        todo_cards.appendChild(load_more);
+    
+        // load more button functionality
+        load_more_button.addEventListener('click', () => {
+            load_more_button.disabled = true;
+            load_more_button.style.display = 'none';
+    
+            for (let i = initial; i < data.length; ++i)
+            {
+                let todo = data[i];
+                createCard(todo);
+            }
+    
+        });
+    }
+
+}
+
+export async function renderFilteredData(type, search_text)
+{
+    // selecting the todo card div containing all the cards
+    const todo_cards = document.querySelector('.todo-cards'); 
+    
+    // deleting all the cards
+    while(todo_cards.firstChild)
+    {
+        todo_cards.removeChild(todo_cards.firstChild);
+    }
+
+    // fetching the card data from the DB based on the filter
+
+    // When the filter is incomplete
+    if (type === 'incomplete')
+        var {error, data} = await getIncompleteData(search_text);
+
+    else if (type === 'complete')
+        var {error, data} = await getCompleteData(search_text);
+
+    if (error)
+    {
+        throw new Error("Error while getting filtered data");
+    }
+
+    // setting initial as the minimum between data.length and limit
+    const initial = (data.length > limit) ? limit : data.length;
+
+    for (let i = 0; i < initial; ++i)
+    {
+        let todo = data[i];
+        createCard(todo);
+    }
+
+    const incomplete_button = document.querySelector('#incomplete-button');
+    const complete_button = document.querySelector('#complete-button');
+    
+    if (incomplete_button.disabled === true) incomplete_button.disabled = false;
+    if (complete_button.disabled === true) complete_button.disabled = false;
+
+    // if anymore data is left load them
+    if (initial < data.length)
+    {
+        const load_more = document.createElement("div");
+        load_more.setAttribute('class', 'load-more');
+
+        const load_more_button = document.createElement("button");
+        load_more_button.setAttribute('id', 'load-more-button');
+        load_more_button.appendChild(document.createTextNode("Load More"));
+    
+        load_more.appendChild(load_more_button);
+
+        todo_cards.appendChild(load_more);
+        
+        // load more button functionality
+        load_more_button.addEventListener('click', () => {
+            load_more_button.disabled = true;
+            load_more_button.style.display = 'none';
+    
+            for (let i = initial; i < data.length; ++i)
+            {
+                let todo = data[i];
+                createCard(todo);
+            }
+    
+        });
+    }
 }
 
 function createCard(todo)
@@ -217,6 +323,8 @@ function createCard(todo)
 
     if (todo.saved && !todo.completed) // saved state
     {
+        display_text.removeAttribute('class');
+        display_text.setAttribute('class', 'uneditable-text');
         save_button.style.display = "none";
         duration_text.style.display = "none";
     }
@@ -224,6 +332,7 @@ function createCard(todo)
     else if (!todo.saved && !todo.completed) // edit state
     {
         display_text.contentEditable = true;
+        display_text.setAttribute('class', 'input-text');
         save_button.style.display = "inline-block";
         done_button.style.display = "none";
         edit_button.style.display = "none";
@@ -248,5 +357,5 @@ function createCard(todo)
         edit_button.style.display = "none";
     }
 
-    todo_cards.prepend(node);
+    todo_cards.append(node);
 }
