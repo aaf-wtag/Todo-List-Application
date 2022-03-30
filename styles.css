@@ -5,13 +5,105 @@ html {
   *, *::before, *::after {
     box-sizing: inherit;
     margin: 0;
-    margin: 0;
+    padding: 0;
   }
 
 body {
-    font-family: Roboto, sans-serif;
+    font-family: "Roboto", sans-serif;
     line-height: 1.4;
 }
+
+
+
+.top-panel
+{
+    box-sizing: inherit;
+    display: flex;
+    flex-wrap: wrap;
+    height: 72px;
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    top: 0%;
+    bottom: 0%;
+
+    /* margin-left: 150px;
+    margin-right: 150px; */
+    background: #FFFFFF;
+    border: 1px solid #DDE2FF
+}
+
+.app-logo
+{
+    display: inline-flex;
+    position: absolute;
+    width: 33.95px;
+    height: 33.98px;
+    left: 150px;
+    top: 19px;
+    /* margin-bottom: 19px; */
+ 
+}
+
+.app-title
+{
+    position: absolute;
+    display: inline-flex;
+    width: 99px;
+    height: 42px;
+    left: 198px;
+    top: 15px;
+    /* margin-bottom: 15px; */
+}
+
+#title
+{
+    position: relative;
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 42px;
+    color: #7A8DFD;
+}
+
+.search
+{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin-right: 150px;
+}
+
+
+#search-button
+{
+    /* display: inline;
+    float: right; */
+    width: 23.82px;
+    height: 24px;
+    margin-left: 1339px;
+    /* margin-right: 150px; */
+    /* top: 24px; */
+    /* margin-bottom: 24px; */
+}
+
+/* couldn't find any predefined style in mockup so using my own */
+#search-field
+{
+    /* display: inline;
+    float: right; */
+    display: none;
+    font-family: Roboto, 'sans-serif';
+    font-size: 20px;
+    color: #000010;
+    border: 1px solid #000100;
+    border-radius: 5px;
+    width: 300px;
+    height: 36px;
+    margin-left: 1000px;
+}
+
 
 .container
 {
@@ -27,76 +119,6 @@ body {
     /* margin-right: 150px; */
     max-height: 982px;
     overflow-y: auto;
-}
-
-.top-panel
-{
-    box-sizing: inherit;
-    display: inline;
-    height: 72px;
-    position: absolute;
-    left: 0%;
-    right: 0%;
-    top: 0%;
-    bottom: 0%;
-
-    margin-left: 150px;
-    margin-right: 150px;
-    background: #FFFFFF;
-    border: 1px solid #DDE2FF
-}
-
-.app-logo
-{
-    display: inline;
-    position: absolute;
-    width: 33.95px;
-    height: 33.98px;
-    margin-left: 150px;
-    margin-top: 19px;
-    /* margin-bottom: 19px; */
- 
-}
-
-.app-title
-{
-    position: absolute;
-    display: inline;
-    width: 99px;
-    height: 42px;
-    margin-left: 198px;
-    margin-top: 15px;
-    /* margin-bottom: 15px; */
-    display: inline;
-    font-family: Roboto, sans-serif;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 42px;
-    color: #7A8DFD;
-}
-
-#title
-{
-    display: inline;
-    font-family: Roboto, sans-serif;
-    font-style: normal; 
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 42px;
-    color: #7A8DFD;
-}
-
-#search-button
-{
-    position: absolute;
-    display: inline;
-    width: 23.82px;
-    height: 24px;
-    margin-left: 1339px;
-    /* margin-right: 150px; */
-    margin-top: 24px;
-    /* margin-bottom: 24px; */
 }
 
 .label
@@ -342,4 +364,19 @@ body {
     width: 351px;
     height: 80px;
 
+}
+
+#load-more-button
+{
+    display: block;
+    width: 117px;
+    height: 36px;
+    background-color: #32394B;
+    border: 1px solid #DDE2FF;
+    border-radius: 5px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    color: #FFFFFF;
 }
