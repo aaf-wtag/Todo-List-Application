@@ -17,8 +17,10 @@ setTimeout( () => {
   isSplashScreenOn = false;
   const splashScreen = document.querySelector(".splash-screen");
   splashScreen.style.display = 'none';
+  const article = document.querySelector('article');
+  article.style.display = "block";
   if (isDomLoaded)
-  {
+  {  
     renderData(searchText, filterType);
   }
 }, 2000);
