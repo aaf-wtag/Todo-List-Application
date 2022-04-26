@@ -1,1 +1,72 @@
+<!DOCTYPE html>
 
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" , content="IE-edge" />
+    <title>Todos</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+
+    <link href="./styles.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="splash-screen">
+      <div class="splash-logo">
+        <img src="./images/logo.svg" height="154" width="154">
+      </div>
+      <div class="splash-title">
+        <h1>Todos</h1>
+      </div>
+    </div>
+    <article hidden>
+      <div class="top-panel-container">
+        <div class="app-name-container">
+            <img class="app-logo" src="images/logo.svg" alt="todos logo" />
+            <p class="app-title" id="title">Todos</p>
+        </div>
+            <div class="search-container">
+            <input type="text" id="search-field" />
+            <input
+            type="image"
+            id="search-button"
+            src="images/search.svg"
+            alt="search button"
+            ></input>
+        </div>
+      </div>
+
+      <div class="toastContainer">
+        <ul class="toastList"></ul>
+      </div>
+
+      <div class="container">
+        <div class="main-spinner-container">
+          <img id="mainSpinnerIcon" src="./images/spinner.svg" hidden>
+        </div>
+        <p id="add-task-tag">Add Task</p>
+        <div class="initial-buttons-container">
+          <button id="create-button" type="button">
+            <img src="images/create.svg" />Create
+          </button>
+          <div class="filter-buttons-container">
+              <button id="all-button" type="button">All</button>
+              <button id="incomplete-button" type="button">Incomplete</button>
+              <button id="complete-button" type="button">Complete</button>
+          </div>
+        </div>
+        <div class="todo-cards-container"></div>
+      </div>
+    </article>
+  </body>
+
+  <script src="script.js" type="module"></script>
+</html>
