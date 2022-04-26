@@ -1,361 +1,439 @@
-import { getCompleteData, getFromDB, getIncompleteData } from "./db_calls.js"
-import { addTodo, calculateElapsedTime, completeTodo, deleteTodo, editTodo, saveTodo } from "./event_handlers.js"
+import { getDataWithCompletionStatus, getFromDB } from "./db_calls.js";
+import {
+  addTodo,
+  calculateElapsedTime,
+  completeTodo,
+  deleteTodo,
+  editTodo,
+  saveTodo,
+} from "./event_handlers.js";
+import { hideMainBodySpinner, showMainBodySpinner, showSpinner } from "./spinner.js";
 
-const limit = 6; // number of cards to be displayed without pressing "Load More"
+// Hard-coded!
+export const numberOfCardsToShow = 8;
 
 // converts a given dateString from DB to the given date format
-function toDateString(dateString)
-{
-    const [year, month, day] = dateString.split("T")[0].split('-');   
-    return `Created At: ${day}.${month}.${year.substring(2,4)}`;
+const toDateString = (dateString) => {
+  const [year, month, day] = dateString.split("T")[0].split("-");
+  return `Created At: ${day}.${month}.${year.substring(2, 4)}`;
 }
-
 
 // Add a checker for create enabled
 let isCreateEnabled = true;
 
-export function renderOnCreate()
-{
-//    console.log("Create clicked");
-   if (isCreateEnabled)
-   {
-        isCreateEnabled = false;
+const addEmptyTodo = () => {
+  // selecting filter buttons and disable them
+  const allButton = document.querySelector("#all-button");
+  allButton.disabled = true;
 
-        // select todo_cards element
-        const todo_cards = document.querySelector('.todo-cards');
-        // console.log(todo_cards);
+  const incompleteButton = document.querySelector("#incomplete-button");
+  incompleteButton.disabled = true;
 
-        // create the unsaved card div element representing each card
-        const node = document.createElement('div');  
-        node.setAttribute('class', 'card-item unsaved-card'); 
+  const completeButton = document.querySelector("#complete-button");
+  completeButton.disabled = true;
 
-        // Start to fill in the unsaved card div with various elements 
+  const container = document.querySelector(".container");
 
-        // Create the input text area element and append it to the unsaved card div
-        const input_text = document.createElement('textarea');
-        input_text.setAttribute("class", "input-text");
-        input_text.placeholder = "What do you want to do?";
-        
-        // input_text.focus(); // NOT WORKING :(
-        // input_text.autofocus = true; // Autofocus processing was blocked because a document already has a focused element.
-                                    // Cannot even find the element that is focused
+  const todoCardsContainer = document.querySelector(".todo-cards-container");
+  if (todoCardsContainer) todoCardsContainer.remove();
 
-        node.appendChild(input_text);
+  const emptyTodoContainer = document.createElement("div");
+  emptyTodoContainer.setAttribute("class", "empty-todo-container");
 
-        // Create a todo_buttons div containing the buttons in the unsaved cards div
-        const todo_buttons = document.createElement('div');
-        todo_buttons.setAttribute('class', 'todo-buttons');
-        
-        // Create the Add Task button and appending it to the todo_buttons
-        const add_task_button = document.createElement('button');
-        add_task_button.setAttribute('class', 'add-task-button');
-        add_task_button.appendChild(document.createTextNode("Add Task"));
-        todo_buttons.appendChild(add_task_button);
+  const emptyTodoImageContainer = document.createElement("div");
+  emptyTodoImageContainer.setAttribute(
+    "class",
+    "empty-todo-image-container"
+  );
 
-        // followed by the event handler for the Add Task button 
-        add_task_button.addEventListener('click', () => {
-            add_task_button.disabled = true; // diasble the add task button so that multiple clicks don't create multiple cards
-            addTodo();
-            isCreateEnabled = true;
-        });
-        
-        // Create the delete button and appending it to the todo_buttons
-        const delete_button = document.createElement("input");
-        delete_button.setAttribute('class', 'delete-button');
-        delete_button.type = "image";
-        delete_button.name = "delete button";
-        delete_button.src="images/delete.svg";
-        delete_button.alt="delete button";
-        todo_buttons.appendChild(delete_button);
+  const emptyTodoImage = document.createElement("img");
+  emptyTodoImage.src = "./images/empty.svg";
 
-        // followed by the event handler for the Delete button
-        delete_button.addEventListener("click", () => {
-            const item = document.querySelector('.unsaved-card');
-            item.remove();
-            isCreateEnabled = true;
-        });
+  emptyTodoImageContainer.appendChild(emptyTodoImage);
 
-        // appending the todo_button div to the unsaved cards div
-        node.appendChild(todo_buttons);
+  emptyTodoContainer.appendChild(emptyTodoImageContainer);
 
-        // Prepend the element to the DOM as the first child of the 
-        // element referenced by the 'todo_cards' element
-        todo_cards.prepend(node);
-   }
-   
-   else
-   {
-       console.log("Create is disabled");
-   }
-
+  const emptyTodoTextContainer = document.createElement("div");
+  emptyTodoTextContainer.setAttribute("class", "empty-todo-text-container");
+  const emptyTodoText = document.createElement("p");
+  emptyTodoText.setAttribute("class", "empty-todo-text");
+  emptyTodoText.appendChild(
+    document.createTextNode("You didn't add any task. Please, add one.")
+  );
+  emptyTodoTextContainer.appendChild(emptyTodoText);
+  emptyTodoContainer.appendChild(emptyTodoTextContainer);
+  container.appendChild(emptyTodoContainer);
 }
 
-export async function renderAllData(search_text)
-{
-    // selecting the todo card div containing all the cards
-    const todo_cards = document.querySelector('.todo-cards'); 
-    
+export const removeEmptyTodo = (emptyTodoContainer) => {
+  // selecting search and filter buttons and disable them
+  const searchButton = document.querySelector("#search-button");
+  searchButton.disabled = false;
+
+  const allButton = document.querySelector("#all-button");
+  allButton.disabled = false;
+
+  const incompleteButton = document.querySelector("#incomplete-button");
+  incompleteButton.disabled = false;
+
+  const completeButton = document.querySelector("#complete-button");
+  completeButton.disabled = false;
+
+  emptyTodoContainer.remove();
+  const container = document.querySelector(".container");
+  const todoCardsContainer = document.createElement("div");
+  todoCardsContainer.setAttribute("class", "todo-cards-container");
+  container.appendChild(todoCardsContainer);
+}
+
+export const renderOnCreate = (searchText, filterType) => {
+  if (isCreateEnabled) {
+    isCreateEnabled = false;
+
+    // If there exists an emptyTodoContainer it must be removed first
+    const emptyTodoContainer = document.querySelector(".empty-todo-container");
+
+    if (emptyTodoContainer) {
+      removeEmptyTodo(emptyTodoContainer);
+    }
+
+    // select todoCardsContainer element
+    const todoCardsContainer = document.querySelector(".todo-cards-container");
+
+    // create the unsaved card div element representing each card
+    const cardItem = document.createElement("div");
+    cardItem.setAttribute("class", "card-item");
+    cardItem.setAttribute("id", "cardItem_unsaved");
+
+    // Start to fill in the unsaved card div with various elements
+
+    // Creating a spinnerContainer for each card
+    const spinnerContainer = document.createElement("div");
+    spinnerContainer.setAttribute("class", "spinner-container");
+    const spinnerIcon = document.createElement("img");
+    spinnerIcon.setAttribute("id", `spinnerIcon_unsaved`);
+    spinnerIcon.src = "./images/spinner.svg";
+    spinnerIcon.setAttribute("hidden", true);
+    spinnerContainer.appendChild(spinnerIcon);
+    cardItem.appendChild(spinnerContainer);
+
+    // Create the input text area element and append it to the unsaved card div
+    const inputText = document.createElement("textarea");
+    inputText.setAttribute("class", "input-text");
+    inputText.placeholder = "What do you want to do?";
+
+    cardItem.appendChild(inputText);
+
+    // Create a todoButtonsContainer div containing the buttons in the unsaved cards div
+    const todoButtonsContainer = document.createElement("div");
+    todoButtonsContainer.setAttribute("class", "todo-button-container");
+
+    // Create the Add Task button and appending it to the todoButtonsContainer
+    const addTaskButton = document.createElement("button");
+    addTaskButton.setAttribute("class", "add-task-button");
+    addTaskButton.appendChild(document.createTextNode("Add Task"));
+    todoButtonsContainer.appendChild(addTaskButton);
+
+    // Create the delete button and appending it to the todoButtonsContainer
+    const deleteButton = document.createElement("input");
+    deleteButton.setAttribute("class", "delete-button");
+    deleteButton.setAttribute("id", "deleteButton_unsaved");
+    deleteButton.type = "image";
+    deleteButton.name = "delete button";
+    deleteButton.src = "images/delete.svg";
+    deleteButton.alt = "delete button";
+    todoButtonsContainer.appendChild(deleteButton);
+
+    // appending the todo_button div to the unsaved cards div
+    cardItem.appendChild(todoButtonsContainer);
+
+    todoCardsContainer.prepend(cardItem);
+
+    // the event handler for the Delete button
+    deleteButton.addEventListener("click", () => {
+      const item = document.getElementById("cardItem_unsaved");
+      item.remove();
+      isCreateEnabled = true;
+    });
+
+    // followed by the event handler for the Add Task button
+    addTaskButton.addEventListener("click", () => {
+      addTodo(searchText, filterType);
+      isCreateEnabled = true;
+    });
+
+  } else {
+    console.log("Create is disabled");
+  }
+}
+
+export const renderData = async (searchText, filterType) => {
+  // If there exists an emptyTodoContainer it must be removed first
+
+  const emptyTodoContainer = document.querySelector(".empty-todo-container");
+
+  if (emptyTodoContainer) {
+    removeEmptyTodo(emptyTodoContainer);
+  }
+
+  // deleting the extra load more
+  const loadMore = document.querySelector(".load-more");
+  if (loadMore) loadMore.remove();
+
+  // selecting the todo card div containing all the cards
+  const todoCardsContainer = document.querySelector(".todo-cards-container");
+
+  if (todoCardsContainer) {
+
     // deleting all the cards
-    while(todo_cards.firstChild)
-    {
-        todo_cards.removeChild(todo_cards.firstChild);
+    while (todoCardsContainer.firstChild) {
+      todoCardsContainer.removeChild(todoCardsContainer.firstChild);
     }
 
     // fetching the card data from the DB
-    const {error, data} = await getFromDB(search_text);
+    let dataFromDB;
 
-    if(error)
-    {
-        throw new Error("Error while getting filtere data");
+    showMainBodySpinner();
+    if (filterType === "all")
+      dataFromDB = await getFromDB(searchText);
+
+    else if (filterType === "complete")
+      dataFromDB = await getDataWithCompletionStatus(searchText, true);
+    
+    else if (filterType === "incomplete" )
+      dataFromDB = await getDataWithCompletionStatus(searchText, false);
+    hideMainBodySpinner();
+
+    const { error, data } = dataFromDB;
+
+    if (error) {
+      throw new Error("Error while getting filtered data");
     }
 
-    // setting initial as the minimum of data.length and limit
-    const initial = (data.length > limit) ? limit : data.length;
+    if (data.length === 0) {
+      addEmptyTodo();
+    } else {
+      // setting initial as the minimum of data.length and numberOfCardsToShow
+      const initial = data.length > numberOfCardsToShow ? numberOfCardsToShow : data.length;
 
-    for (let i = 0; i < initial; ++i)
-    {
+      for (let i = 0; i < initial; ++i) {
         let todo = data[i];
-        createCard(todo);
+        createCard(todo, searchText, filterType);
+      }
+
+      // filter buttons state updated
+      const allButton = document.querySelector("#all-button");
+      const incompleteButton = document.querySelector("#incomplete-button");
+      const completeButton = document.querySelector("#complete-button");
+
+      if (filterType === "all") {
+        allButton.disabled = true;
+        incompleteButton.disabled = false;
+        completeButton.disabled = false;
+      }
+      else if (filterType === "incomplete") {
+        incompleteButton.disabled = true;
+        completeButton.disabled = false;
+        allButton.disabled = false;
+      }
+
+      else if (filterType === "complete") {
+        completeButton.disabled = true;
+        incompleteButton.disabled = false;
+        allButton.disabled = false;
+      }
+
+      // load more button created if there are more cards than initial numberOfCardsToShow
+      if (initial < data.length) {
+        createLoadMore(data, initial, searchText, filterType);
+      }
     }
-
-    // all button activated
-    const all_button = document.querySelector('#all-button');
-    if (all_button.disabled === true) all_button.disabled = false;
-
-    // load more button created if there are more cards than initial limit
-    if (initial < data.length)
-    {
-        const load_more = document.createElement("div");
-        load_more.setAttribute('class', 'load-more');
-
-
-        const load_more_button = document.createElement("button");
-        load_more_button.setAttribute('id', 'load-more-button');
-        load_more_button.appendChild(document.createTextNode("Load More"));
-    
-        load_more.appendChild(load_more_button);
-
-        todo_cards.appendChild(load_more);
-    
-        // load more button functionality
-        load_more_button.addEventListener('click', () => {
-            load_more_button.disabled = true;
-            load_more_button.style.display = 'none';
-    
-            for (let i = initial; i < data.length; ++i)
-            {
-                let todo = data[i];
-                createCard(todo);
-            }
-    
-        });
-    }
-
+  }
 }
 
-export async function renderFilteredData(type, search_text)
-{
-    // selecting the todo card div containing all the cards
-    const todo_cards = document.querySelector('.todo-cards'); 
-    
-    // deleting all the cards
-    while(todo_cards.firstChild)
-    {
-        todo_cards.removeChild(todo_cards.firstChild);
+const createLoadMore = (data, initial, searchText, filterType) => {
+
+  const container = document.querySelector(".container");
+  const loadMore = document.createElement("div");
+  loadMore.setAttribute("class", "load-more");
+
+  const loadMoreButton = document.createElement("button");
+  loadMoreButton.setAttribute("id", "load-more-button");
+  loadMoreButton.appendChild(document.createTextNode("Load More"));
+
+  loadMore.appendChild(loadMoreButton);
+
+  container.appendChild(loadMore);
+
+  // load more button functionality
+  loadMoreButton.addEventListener("click", () => {
+    const loadMoreContainer= document.querySelector(".load-more");
+    loadMoreContainer.remove();
+
+    for (let i = initial; i < data.length; ++i) {
+      let todo = data[i];
+      createCard(todo, searchText, filterType);
     }
-
-    // fetching the card data from the DB based on the filter
-
-    // When the filter is incomplete
-    if (type === 'incomplete')
-        var {error, data} = await getIncompleteData(search_text);
-
-    else if (type === 'complete')
-        var {error, data} = await getCompleteData(search_text);
-
-    if (error)
-    {
-        throw new Error("Error while getting filtered data");
-    }
-
-    // setting initial as the minimum between data.length and limit
-    const initial = (data.length > limit) ? limit : data.length;
-
-    for (let i = 0; i < initial; ++i)
-    {
-        let todo = data[i];
-        createCard(todo);
-    }
-
-    const incomplete_button = document.querySelector('#incomplete-button');
-    const complete_button = document.querySelector('#complete-button');
-    
-    if (incomplete_button.disabled === true) incomplete_button.disabled = false;
-    if (complete_button.disabled === true) complete_button.disabled = false;
-
-    // if anymore data is left load them
-    if (initial < data.length)
-    {
-        const load_more = document.createElement("div");
-        load_more.setAttribute('class', 'load-more');
-
-        const load_more_button = document.createElement("button");
-        load_more_button.setAttribute('id', 'load-more-button');
-        load_more_button.appendChild(document.createTextNode("Load More"));
-    
-        load_more.appendChild(load_more_button);
-
-        todo_cards.appendChild(load_more);
-        
-        // load more button functionality
-        load_more_button.addEventListener('click', () => {
-            load_more_button.disabled = true;
-            load_more_button.style.display = 'none';
-    
-            for (let i = initial; i < data.length; ++i)
-            {
-                let todo = data[i];
-                createCard(todo);
-            }
-    
-        });
-    }
+  });
 }
 
-function createCard(todo)
-{
-    // Select the todo_cards div which contains all the cards
-    const todo_cards = document.querySelector('.todo-cards');
+const createCard = (todo, searchText, filterType) => {
 
+  isCreateEnabled = true;
+
+  // Select the todoCardsContainer div which contains all the cards
+  const todoCardsContainer = document.querySelector(".todo-cards-container");
+
+  if (todoCardsContainer) {
     // Creating a card item div for displaying the card of the todo object
-    const node = document.createElement("div");
-    node.setAttribute('class', 'card-item');
-    node.setAttribute('data-key', todo.id); // can be used to uniquely identify each card object
+    const cardItem = document.createElement("div");
+    cardItem.setAttribute("class", "card-item");
+    cardItem.setAttribute("id", `cardItem_${todo.id}`); // can be used to uniquely identify each card object
 
     // Set the contents of the card item div
 
+    // Creating a spinnerContainer for each card
+    const spinnerContainer = document.createElement("div");
+    spinnerContainer.setAttribute("class", "spinner-container");
+    const spinnerIcon = document.createElement("img");
+    spinnerIcon.setAttribute("id", `spinnerIcon_${todo.id}`);
+    spinnerIcon.src = "./images/spinner.svg";
+    spinnerIcon.setAttribute("hidden", true);
+    spinnerContainer.appendChild(spinnerIcon);
+    cardItem.appendChild(spinnerContainer);
+
     // Creating an uneditable text paragraph element for displaying the text in the todo object
     // and appending it to the card item div
-    const display_text = document.createElement("p");
-    display_text.setAttribute('class', 'uneditable-text');
-    display_text.setAttribute('id', `display_text_${todo.id}`);
-    display_text.appendChild(document.createTextNode(todo.text));
-    node.appendChild(display_text);
+    const displayText = document.createElement("p");
+    displayText.setAttribute("class", "uneditable-text");
+    displayText.setAttribute("id", `displayText_${todo.id}`);
+    displayText.appendChild(document.createTextNode(todo.text));
+    cardItem.appendChild(displayText);
 
     // Creating a timestamp string
     const timestamp = toDateString(todo.created_at);
 
     // Creating a paragraph element for the timestamp and appending it to the card item div
-    const display_timestamp = document.createElement("p");
-    display_timestamp.setAttribute('class', 'timestamp');
-    display_timestamp.appendChild(document.createTextNode(timestamp));
-    node.appendChild(display_timestamp);
+    const displayTimestamp = document.createElement("p");
+    displayTimestamp.setAttribute("class", "timestamp");
+    displayTimestamp.appendChild(document.createTextNode(timestamp));
+    cardItem.appendChild(displayTimestamp);
 
-    // Creating a span element that will contain all the buttons and tags 
+    // Creating a span element that will contain all the buttons and tags
     // contained by any card at any given state: edit, saved, completed, etc.
-    const span_element = document.createElement('span');
+    const buttonsAndDuration = document.createElement("div");
+    buttonsAndDuration.setAttribute("class", "buttons-and-duration");
 
     // creating an all todo buttons div just for the buttons and appending it to the span element
-    const all_todo_buttons = document.createElement("div");
-    all_todo_buttons.setAttribute('class', 'all-todo-buttons');
-    
+    const todoButtonsContainer = document.createElement("div");
+    todoButtonsContainer.setAttribute("class", "all-todo-button-container");
+
     // creating the done button and appending it to the all todo buttons div
-    const done_button = document.createElement("input");
-    done_button.setAttribute('class', 'done-button');
-    done_button.setAttribute('id', `done_button_${todo.id}`);
-    done_button.type = "image";
-    done_button.name = "done button";
-    done_button.src="images/done.svg";
-    done_button.alt="done button";
-    all_todo_buttons.appendChild(done_button);
+    const doneButton = document.createElement("input");
+    doneButton.setAttribute("class", "done-button");
+    doneButton.setAttribute("id", `doneButton_${todo.id}`);
+    doneButton.type = "image";
+    doneButton.name = "done button";
+    doneButton.src = "images/done.svg";
+    doneButton.alt = "done button";
+    todoButtonsContainer.appendChild(doneButton);
 
     // followed by an eventhandler for the done button
-    done_button.addEventListener("click", () => completeTodo(todo));
+    doneButton.addEventListener("click", () => completeTodo(todo, searchText, filterType));
 
     // creating the save button and appending it to the all todo buttons div
-    const save_button = document.createElement("button");
-    save_button.setAttribute('class', 'save-button');
-    save_button.setAttribute('id', `save_button_${todo.id}`);
-    save_button.appendChild(document.createTextNode("Save"));
-    all_todo_buttons.appendChild(save_button);
+    const saveButton = document.createElement("button");
+    saveButton.setAttribute("class", "save-button");
+    saveButton.setAttribute("id", `saveButton_${todo.id}`);
+    saveButton.appendChild(document.createTextNode("Save"));
+    todoButtonsContainer.appendChild(saveButton);
 
     // followed by an eventhandler for the save button
-    save_button.addEventListener("click", () => saveTodo(todo))
+    saveButton.addEventListener("click", () => saveTodo(todo));
 
     // creating the edit button and appending it to the all todo buttons div
-    const edit_button = document.createElement("input");
-    edit_button.setAttribute('class', 'edit-button');
-    edit_button.setAttribute('id', `edit_button_${todo.id}`);
-    edit_button.type = "image";
-    edit_button.name = "edit button";
-    edit_button.src="images/edit.svg";
-    edit_button.alt="edit button";
-    all_todo_buttons.appendChild(edit_button);
+    const editButton = document.createElement("input");
+    editButton.setAttribute("class", "edit-button");
+    editButton.setAttribute("id", `editButton_${todo.id}`);
+    editButton.type = "image";
+    editButton.name = "edit button";
+    editButton.src = "images/edit.svg";
+    editButton.alt = "edit button";
+    todoButtonsContainer.appendChild(editButton);
 
     // followed by an eventhandler for the edit button
-    edit_button.addEventListener("click", () => editTodo(todo));
+    editButton.addEventListener("click", () => editTodo(todo));
 
     // creating the delete button and appending it to the all todo buttons div
-    const delete_button = document.createElement("input");
-    delete_button.setAttribute('class', 'delete-button');
-    delete_button.setAttribute('id', `delete_button_${todo.id}`);
-    delete_button.type = "image";
-    delete_button.name = "delete button";
-    delete_button.src="images/delete.svg";
-    delete_button.alt="delete button";
-    all_todo_buttons.appendChild(delete_button);
+    const deleteButton = document.createElement("input");
+    deleteButton.setAttribute("class", "delete-button");
+    deleteButton.setAttribute("id", `deleteButton_${todo.id}`);
+    deleteButton.type = "image";
+    deleteButton.name = "delete button";
+    deleteButton.src = "images/delete.svg";
+    deleteButton.alt = "delete button";
+    todoButtonsContainer.appendChild(deleteButton);
 
     // followed by an eventhandler for the delete button
-    delete_button.addEventListener("click", () => deleteTodo(todo));
+    deleteButton.addEventListener("click", () => deleteTodo(todo, searchText, filterType));
 
-    span_element.appendChild(all_todo_buttons);
+    buttonsAndDuration.appendChild(todoButtonsContainer);
 
     // Creating a duration text div object and appending to the span element
-    const duration_text = document.createElement("div");
-    duration_text.setAttribute('class', 'duration-text');
-    duration_text.setAttribute('id', `duration_text_${todo.id}`);
+    const durationText = document.createElement("div");
+    durationText.setAttribute("class", "duration-text");
+    durationText.setAttribute("id", `durationText_${todo.id}`);
 
-    span_element.appendChild(duration_text);
-   
-    node.appendChild(span_element);
+    buttonsAndDuration.appendChild(durationText);
+
+    cardItem.appendChild(buttonsAndDuration);
 
     // depending on states, show the particular elements
 
-    if (todo.saved && !todo.completed) // saved state
-    {
-        display_text.removeAttribute('class');
-        display_text.setAttribute('class', 'uneditable-text');
-        save_button.style.display = "none";
-        duration_text.style.display = "none";
-    }
+    if (todo.saved && !todo.completed) {
+      // saved state
+      displayText.removeAttribute("class");
+      displayText.setAttribute("class", "uneditable-text");
+      saveButton.style.display = "none";
+      durationText.style.display = "none";
+    } 
+    
+    else if (!todo.saved && !todo.completed) {
+      // edit state
+      const text = todo.text;
+      const editText = document.createElement("textarea");
+      editText.setAttribute("id", `displayText_${todo.id}`);
+      editText.setAttribute("class", "input-text");
+      editText.value = text;
+      cardItem.replaceChild(editText, displayText);
 
-    else if (!todo.saved && !todo.completed) // edit state
-    {
-        display_text.contentEditable = true;
-        display_text.setAttribute('class', 'input-text');
-        save_button.style.display = "inline-block";
-        done_button.style.display = "none";
-        edit_button.style.display = "none";
-        duration_text.style.display = "none";
-    }
+      saveButton.style.display = "inline-block";
+      doneButton.style.display = "none";
+      editButton.style.display = "none";
+      durationText.style.display = "none";
+    } 
+    
+    else if (todo.completed) {
+      // completed state
+      // Calculating the elapsed time
+      if (todo.completed) {
+        let elapsedTime = calculateElapsedTime(
+          todo.created_at,
+          todo.completed_at
+        );
+        
+        durationText.appendChild(
+          document.createTextNode(`Completed in ${elapsedTime} days`)
+        );
+      }
 
-    else if (todo.completed) // completed state
-    {
-        // Calculating the elapsed time
-        if (todo.completed)
-        {
-            let elapsed_time = calculateElapsedTime(todo.created_at, todo.completed_at);
-            // console.log(elapsed_time);
-            duration_text.appendChild(document.createTextNode(`Completed in ${elapsed_time} days`));
-        }
-
-        display_text.style.textDecoration = "line-through";
-        display_text.style.color = "#0BC375";
-        duration_text.style.display = "inline-block";   
-        save_button.style.display = "none";
-        done_button.style.display = "none";
-        edit_button.style.display = "none";
-    }
-
-    todo_cards.append(node);
+      displayText.style.textDecoration = "line-through";
+      displayText.style.color = "#0BC375";
+      durationText.style.display = "inline-block";
+      saveButton.style.display = "none";
+      doneButton.style.display = "none";
+      editButton.style.display = "none";
+    }   
+    todoCardsContainer.append(cardItem);
+  }
 }

@@ -1,382 +1,431 @@
-html {
-    box-sizing: border-box;
-  }
-  
-  *, *::before, *::after {
-    box-sizing: inherit;
-    margin: 0;
-    padding: 0;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
-    font-family: "Roboto", sans-serif;
-    line-height: 1.4;
+  font-family: "Roboto", sans-serif;
+  line-height: 1.4;
 }
 
-
-
-.top-panel
-{
-    box-sizing: inherit;
-    display: flex;
-    flex-wrap: wrap;
-    height: 72px;
-    position: absolute;
-    left: 0%;
-    right: 0%;
-    top: 0%;
-    bottom: 0%;
-
-    /* margin-left: 150px;
-    margin-right: 150px; */
-    background: #FFFFFF;
-    border: 1px solid #DDE2FF
+.splash-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0 auto;
+  gap: 40px;
 }
 
-.app-logo
-{
-    display: inline-flex;
-    position: absolute;
-    width: 33.95px;
-    height: 33.98px;
-    left: 150px;
-    top: 19px;
-    /* margin-bottom: 19px; */
- 
+.splash-title > h1 {
+  font-family: Roboto, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 96px;
+  line-height: 112px;
+  color: #7a8dfd;
 }
 
-.app-title
-{
-    position: absolute;
-    display: inline-flex;
-    width: 99px;
-    height: 42px;
-    left: 198px;
-    top: 15px;
-    /* margin-bottom: 15px; */
+article {
+  display: block;
+  width: 100%;
+  height: 90vh;
+  margin-bottom: 5vh;
+  margin: auto;
 }
 
-#title
-{
-    position: relative;
-    font-family: "Roboto", sans-serif;
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 42px;
-    color: #7A8DFD;
+.top-panel-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 72px;
+  background: #ffffff;
+  border: 1px solid #dde2ff;
+  justify-content: space-evenly;
+  gap: 39%;
 }
 
-.search
-{
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    margin-right: 150px;
+.app-name-container {
+  display: inline-flex;
+  align-items: center;
 }
 
-
-#search-button
-{
-    /* display: inline;
-    float: right; */
-    width: 23.82px;
-    height: 24px;
-    margin-left: 1339px;
-    /* margin-right: 150px; */
-    /* top: 24px; */
-    /* margin-bottom: 24px; */
+.app-logo {
+  width: 30px;
+  height: 30px;
+  /* margin-left: 150px; */
+  margin-right: 14px;
 }
 
-/* couldn't find any predefined style in mockup so using my own */
-#search-field
-{
-    /* display: inline;
-    float: right; */
-    display: none;
-    font-family: Roboto, 'sans-serif';
-    font-size: 20px;
-    color: #000010;
-    border: 1px solid #000100;
-    border-radius: 5px;
-    width: 300px;
-    height: 36px;
-    margin-left: 1000px;
+.app-title {
+  width: 99px;
+  height: 42px;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 42px;
+  color: #7a8dfd;
+  /* margin-right: 500px; */
 }
 
-
-.container
-{
-    width: 1512px;
-    max-width: 1512px;
-    /* margin: 0 auto; */
-    margin-left: 10px;
-    margin-right: 10px;
-    height: 90vh;
-    margin-top: 5vh;
-    margin-bottom: 5vh;
-    margin-left: 150px;
-    /* margin-right: 150px; */
-    max-height: 982px;
-    overflow-y: auto;
+.search-container {
+  display: inline-flex;
+  height: 100%;
+  width: 560px;
+  align-items: center;
 }
 
-.label
-{
-    position: absolute;
-    width: 351px;
-    height: 35px;
-    left: 0%;
-    right: 0%;
-    top: 0%;
-    bottom: 0%;
-
-    margin-left: 150px;
-    /* margin-right: 1011px; */
-    margin-top: 137px;
-    /* margin-bottom: 810px; */
+#search-field {
+  display: none;
+  font-size: 20px;
+  color: #000010;
+  border: 3px solid #d1d8ff;
+  background-color: #ffffff;
+  border-radius: 5px;
+  width: 518px;
+  height: 36px;
+  margin-right: 14px;
 }
 
-#label-text
-{
-    font-family: Roboto, sans-serif;
-    position: absolute;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 30px;
-    line-height: 35px;
-
-    margin-left: 150px;
-    margin-top: 65px;
-    
-    color: #32394B;;
+#search-button {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  margin-left: 28%;
 }
 
-.initial-buttons
-{
-    position: absolute;
-    font-family: Roboto, sans-serif;
-    font-style: normal;
-    text-align: center;
-    display: inline-block;
-    margin-top: 128px;
+.container {
+  /* position: relative; */
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background-color: #f8f9ff;
+  padding: 0 150px;
+  padding-top: 65px;
 }
 
-#create-button
-{
-    /* font-family: Roboto;
-    font-style: normal;
-    text-align: center; */
-    width: 104px;
-    height: 36px;
-    color: #FFFFFF;
-    position: absolute;
-    background: #7A8DFD;
-    border-radius: 5px;
-    margin-left: 150px;
-    /* padding-top: 8px;
-    padding-bottom: 8px;  
-    padding-right: 5px;
-    padding-left: 5px;    */
+#add-task-tag {
+  font-family: Roboto, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 30px;
+  color: #32394b;
+  margin-bottom: 28px;
 }
 
-#all-button
-{
-    /* display: inline-block; */
-    width: 48px;
-    height: 36px;
-    border-radius: 5px;
-    position: absolute;
-    background: #FFFFFF;
-    margin-left: 1062px;
+.main-spinner-container {
+  display: flex;
+  position: absolute;
+  left: 47%;
+  top: 45%;
+  justify-content: center;
+  align-items: center;
+  animation: spin 1s linear infinite;
 }
 
-#incomplete-button
-{
-    /* display: inline-block; */
-    width: 111px;
-    height: 36px;
-    border-radius: 5px;
-    position: absolute;
-    background: #FFFFFF;
-    margin-left: 1129px;
+.initial-buttons-container {
+  width: 100%;
+  font-family: Roboto, sans-serif;
+  display: inline-flex;
+  height: 36px;
+  justify-content: space-between;
+  margin-bottom: 34px;
 }
 
-#complete-button
-{
-    width: 104px;
-    height: 36px;
-    border-radius: 5px;
-    position: absolute;
-    background: #FFFFFF;
-    margin-left: 1259px;
+#create-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-style: bold;
+  font-size: 16px;
+  width: 104px;
+  height: 36px;
+  color: #ffffff;
+  background: #7a8dfd;
+  border-radius: 5px;
 }
 
-
-/* Confusion about where and how to use flexbox */
-
-.todo-cards
-{
-    display: flex;
-    flex-wrap: wrap;
-    flex: 382px; 
-    position: absolute;
-    display: flex;
-    font-family: Roboto, 'sans-serif';
-    margin-left: 150px;
-    /* margin-right: 150px; */
-    margin-top: 270px;
-    
-    /* flex-direction: row-reverse;  */
+.filter-buttons-container {
+  display: inline-flex;
+  gap: 19px;
 }
 
-.card-item
-{
-    background: #FFFFFF;
-    border: 1px solid #DDE2FF;
-    box-sizing: border-box;
-    border-radius: 5px;
-    padding-right: 16px;
-    padding-left: 16px;
-    padding-top:15px;
-    padding-bottom: 19px;
+#all-button {
+  width: 48px;
+  height: 36px;
+  border-radius: 5px;
+  background: #ffffff;
+  align-self: flex-end;
 }
 
-.input-text
-{
-    font-family: Roboto, 'sans-serif';
-    font-size: 20px;
-    background: #FFFFFF;
-    border: 1px solid #DDE2FF;
-    box-sizing: border-box;
-    border-radius: 5px;
-    width: 351px;
-    height: 80px;
+#incomplete-button {
+  width: 111px;
+  height: 36px;
+  border-radius: 5px;
+  background: #ffffff;
+  align-self: flex-end;
 }
 
-.uneditable-text
-{
-    font-family: Roboto, 'sans-serif';
-    font-size: 20px;
-    background: #FFFFFF;
-    /* border: 1px solid #DDE2FF; */
-    box-sizing: border-box;
-    /* border-radius: 5px; */
-    width: 351px;
-    height: 80px;
+#complete-button {
+  width: 104px;
+  height: 36px;
+  border-radius: 5px;
+  background: #ffffff;
+  align-self: flex-end;
 }
 
-.todo-buttons
-
-{
-    padding-top: 12px;
-    padding-left: 16px;
+.todo-cards-container {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 33px;
+  align-items: stretch;
+  align-content: center;
 }
 
-.add-task-button
-{
-    width: 91px;
-    height: 36px;
-    border-radius: 5px;
-    background: #FFFFFF;
+.card-item {
+  flex: 0 1 23.4%;
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #dde2ff;
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 16px;
 }
 
-.delete-button
-{
-    display: inline-block;
-    /* align-content: center; */
-    width: 24px;
-    height: 19px;
-    margin-right: 26px;
-    margin-top: 26px;
+.spinner-container {
+  display: flex;
+  left: 35%;
+  position: absolute;
+  justify-content: center;
+  align-content: center;
+  animation: spin 1s linear infinite;
 }
 
-.done-button
-{
-    display: inline-block;
-    width: 24px;
-    height: 19px;
-    margin-right: 26px;
-    margin-top: 26px;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.edit-button
-{
-    display: inline-block;
-    width: 24px;
-    height: 19px;
-    margin-right: 26px;
-    margin-top: 26px;
+.lower-opacity {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: rgba(0, 0, 0, 0.25);
+  pointer-events: none;
 }
 
-.timestamp
-{
-    display: "block";
-    font-family: Roboto, 'sans-serif';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 16px;
-    color: #BBBDD0;
-    background: #FFFFFF;
-    box-sizing: border-box;
-    width: 121px;
-    height: 16px;
-    margin-top: 9px;
+.input-text {
+  width: 100%;
+  font-family: Roboto, "sans-serif";
+  font-size: 20px;
+  background: #ffffff;
+  border: 1px solid #dde2ff;
+  border-radius: 5px;
 }
 
-.save-button
-{
-    display: inline-block;
-    width: 63px;
-    height: 36px;
-    border-radius: 5px;
-    background: #FFFFFF;
+.uneditable-text {
+  font-family: Roboto, "sans-serif";
+  font-size: 20px;
+  background: #ffffff;
 }
 
-.duration-text
-{
-    display: inline-block;
-    font-family: Roboto, 'sans-serif';
-    font-size: 12px;
-    color: #FFFFFF;
-    background: #7A8DFD;
-    border: 1px solid #DDE2FF;
-    box-sizing: border-box;
-    border-radius: 5px;
-    width: 134px;
-    height: 24px;
-    margin-left: 200px;
-    padding-top: 5px;
-    padding-left: 12px;
+.todo-buttons-container {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 19px;
 }
 
-.completed-text
-{
-    font-family: Roboto, 'sans-serif';
-    font-size: 20px;
-    color: #0BC375;
-    background: #FFFFFF;
-    text-decoration: line-through;
-    /* border: 1px solid #DDE2FF; */
-    box-sizing: border-box;
-    /* border-radius: 5px; */
-    width: 351px;
-    height: 80px;
-
+.add-task-button {
+  width: 91px;
+  height: 36px;
+  border-radius: 5px;
+  background: #ffffff;
 }
 
-#load-more-button
-{
-    display: block;
-    width: 117px;
-    height: 36px;
-    background-color: #32394B;
-    border: 1px solid #DDE2FF;
-    border-radius: 5px;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    color: #FFFFFF;
+.delete-button {
+  display: inline-block;
+  width: 24px;
+  height: 19px;
+}
+
+.buttons-and-duration {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.all-todo-buttons {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+
+.done-button {
+  display: inline-block;
+  width: 24px;
+  height: 19px;
+}
+
+.edit-button {
+  display: inline-block;
+  width: 24px;
+  height: 19px;
+}
+
+.timestamp {
+  display: block;
+  font-family: Roboto, "sans-serif";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  color: #bbbdd0;
+  background: #ffffff;
+  box-sizing: border-box;
+  margin-top: 9px;
+  margin-bottom: 26px;
+}
+
+.save-button {
+  display: inline-block;
+  width: 63px;
+  height: 36px;
+  border-radius: 5px;
+  background: #ffffff;
+}
+
+.duration-text {
+  font-family: Roboto, "sans-serif";
+  font-size: 12px;
+  color: #ffffff;
+  background: #7a8dfd;
+  border: 1px solid #dde2ff;
+  box-sizing: border-box;
+  border-radius: 5px;
+  width: 140px;
+  height: 29px;
+  /* margin-left: 200px; */
+  padding: 5px 12px;
+}
+
+.completed-text {
+  font-family: Roboto, "sans-serif";
+  font-size: 20px;
+  color: #0bc375;
+  background: #ffffff;
+  text-decoration: line-through;
+  /* border: 1px solid #DDE2FF; */
+  box-sizing: border-box;
+  /* border-radius: 5px; */
+  width: 351px;
+  height: 80px;
+}
+
+.load-more {
+  width: 100%;
+  padding: auto;
+  display: flex;
+  justify-content: center;
+}
+
+#load-more-button {
+  margin-top: 57px;
+  width: 117px;
+  height: 36px;
+  background-color: #32394b;
+  border: 1px solid #dde2ff;
+  border-radius: 5px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.empty-todo-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  align-content: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.empty-todo-image-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.empty-todo-text-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.empty-todo-text {
+  font-family: Roboto, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+li {
+  list-style: none;
+}
+.toastContainer {
+  position: absolute;
+  left: 41.5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.toastList {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.toast {
+  font-family: Roboto, sans-serif;
+  width: 100%;
+  padding: 10px 20px;
+  color: #ffffff;
+  font-size: 18px;
+  border-radius: 5px;
+  margin-bottom: 8px;
+}
+
+.toast-success {
+  background: #0bc375;
+}
+
+.toast-fail {
+  background: #e85f5f;
+}
+
+.animate-toast {
+  animation: toastAnimation 0.3s linear;
+}
+
+@keyframes toastAnimation {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 }

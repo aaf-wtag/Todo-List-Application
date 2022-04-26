@@ -1,84 +1,64 @@
 import supabase from "./supabase.js";
 
-export async function getFromDB(text)
-{
+export const  getFromDB = async (searchText) => {
   const { data, error } = await supabase
     .from('todo_table')
     .select()
-    .ilike('text', `%${text}%`)
+    .ilike('text', `%${searchText}%`)
     .order('created_at', { ascending: false });
           
   return {error, data};
 }
 
-export async function insertIntoDB(input_text, completed_state, saved_state)
-{
+export const insertIntoDB = async (inputText, completedState, savedState) => {
   const { data, error } = await supabase
     .from('todo_table')
     .insert([
-        { text: input_text, completed: completed_state, saved: saved_state }
+        { text: inputText, completed: completedState, saved: savedState }
     ]);
 }
 
-export async function deleteFromDB(id)
-{
+export const deleteFromDB = async (id) => {
   const { data, error } = await supabase
     .from('todo_table')
     .delete()
     .match({ id: id });
 }
 
-export async function updateSavedState(id, val)
-{
+export const updateSavedState = async (id, val) => {
   const { data, error } = await supabase
     .from('todo_table')
     .update({ saved: val })
     .match({ id: id });
   }
 
-export async function updateCompletedState(id, val)
-{
+export const updateCompletedState = async (id, val) => {
   const { data, error } = await supabase
     .from('todo_table')
     .update({ completed: val })
     .match({ id: id });
 }
 
-export async function updateText(id, val)
-{
+export const updateText = async (id, val) => {
   const { data, error } = await supabase
     .from('todo_table')
     .update({ text: val })
     .match({ id: id });
 }
 
-export async function updateCompletedAt(id, val)
-{
+export const updateCompletedAt = async (id, val) => {
   const { data, error } = await supabase
     .from('todo_table')
     .update({ completed_at: val })
     .match({ id: id });
 }
 
-export async function getIncompleteData(text)
-{
+export const getDataWithCompletionStatus = async (searchText, isCompleted) => {
   const { data, error } = await supabase
     .from('todo_table')
     .select()
-    .match({completed : false})
-    .ilike('text', `%${text}%`)
-    .order('created_at', { ascending: false });
-
-  return {error, data};
-}
-
-export async function getCompleteData(text)
-{
-  const { data, error } = await supabase
-    .from('todo_table')
-    .select()
-    .match({completed : true})
-    .ilike('text', `%${text}%`)
+    .match({completed : isCompleted})
+    .ilike('text', `%${searchText}%`)
     .order('created_at', { ascending: false });
 
   return {error, data};

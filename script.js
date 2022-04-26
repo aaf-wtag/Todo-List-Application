@@ -1,89 +1,109 @@
-import { renderOnCreate, renderAllData, renderFilteredData } from "./render.js";
+import { renderOnCreate, renderData } from "./render.js";
 
-document.addEventListener('DOMContentLoaded', () => renderAllData(""));
+let searchText = "";
+let filterType = "all";
+
+let isSplashScreenOn = true;
+let isDomLoaded = false;
+
+document.addEventListener("DOMContentLoaded", () => {
+  isDomLoaded = true;
+  if (isSplashScreenOn === false) {
+    renderData(searchText, filterType);
+  }
+});
+
+setTimeout( () => {
+  isSplashScreenOn = false;
+  const splashScreen = document.querySelector(".splash-screen");
+  splashScreen.style.display = 'none';
+  if (isDomLoaded)
+  {
+    renderData(searchText, filterType);
+  }
+}, 2000);
 
 // The create button's functionality implementation
-const create = document.querySelector('#create-button'); // returns null when importing Roboto from Google Fonts
-create.addEventListener('click', () => renderOnCreate());
+const createButton = document.querySelector("#create-button");
+createButton.addEventListener("click", () => renderOnCreate(searchText, filterType));
 
 // The filter all button's functionality implementation
-const all_button = document.querySelector("#all-button");
-all_button.addEventListener('click', () => {
-    all_button.disabled = true;
-    processChange("all");
+const allButton = document.querySelector("#all-button");
+allButton.addEventListener("click", () => {
+  allButton.disabled = true;
+  incompleteButton.disabled = false;
+  completeButton.disabled = false;
+  filterType = "all";
+  processChange();
 });
 
 // The filter incomplete button's functionality implementation
-const incomplete_button = document.querySelector("#incomplete-button")
-incomplete_button.addEventListener('click', () => {
-    incomplete_button.disabled = true;
-    processChange("incomplete");
+const incompleteButton = document.querySelector("#incomplete-button");
+incompleteButton.addEventListener("click", () => {
+  incompleteButton.disabled = true;
+  completeButton.disabled = false;
+  allButton.disabled = false;
+  filterType = "incomplete";
+  processChange();
 });
 
 // The filter complete button's functionality implementation
-const complete_button = document.querySelector("#complete-button")
-complete_button.addEventListener('click', () => {
-    complete_button.disabled = true;
-    processChange("complete");
+const completeButton = document.querySelector("#complete-button");
+completeButton.addEventListener("click", () => {
+  completeButton.disabled = true;
+  incompleteButton.disabled = false;
+  allButton.disabled = false;
+  filterType = "complete";
+  processChange();
 });
 
 // The search button's functionality implementation
-let isSearchActivated = false; 
-const search_button = document.querySelector("#search-button");
+let isSearchActivated = false;
+const searchButton = document.querySelector("#search-button");
 
-search_button.addEventListener("click", () => {
-    if (!isSearchActivated)
-    {
-        isSearchActivated = true;
-        const search = document.querySelector(".search"); 
+searchButton.addEventListener("click", () => {
 
-        // create the text element
-        const text_field = document.getElementById("search-field");
-        text_field.style.display = "inline-flex";
-        // text_field.setAttribute("id", "search-field");
-        // text_field.type = "text";
+  const searchField = document.getElementById("search-field");
 
-        // search.appendChild(text_field);
+  if (!isSearchActivated) {
+    isSearchActivated = true;
 
-        text_field.addEventListener("keydown", () => processChange());  
-    }
+    // show the searchField element
+    searchField.style.display = "inline-flex";
 
-    else
-    {
-        isSearchActivated = false;
-
-        // remove the text element
-        const text_field = document.getElementById("search-field");
-        text_field.style.display = "none";
-        renderAllData("");
-    }
+    searchField.addEventListener("keydown", () => processChange());
+  } else {
+    isSearchActivated = false;
+    searchText = "";
+    // remove the searchText element
+    searchField.style.display = "none";
+    renderData(searchText, filterType);
+  }
 });
 
+
+
 const debounce = (fn, delay) => {
-    let timer;
+  let timer;
 
-    return (...args) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            fn.apply(this, args);
-        }, delay)
-    };
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+    }, delay);
+  };
+};
+
+export async function searchForInput() {
+  if (isSearchActivated) {
+    const searchField = document.querySelector("#search-field");
+    searchText = searchField.value.trim();
+  }
+
+  renderData(searchText, filterType);
 }
 
-export async function search_for_input(button_clicked = "all")
-{
-    let text = "";
-    if (isSearchActivated) 
-    {
-        const text_field = document.querySelector("#search-field");
-        text = text_field.value.trim();
-    } 
-    
-    // console.log(text, button_clicked);
-
-    if (button_clicked === "all") renderAllData(text);
-    else if (button_clicked === "incomplete") renderFilteredData(button_clicked, text);
-    else if (button_clicked === "complete") renderFilteredData(button_clicked, text);
-}
-
-const processChange = debounce((button_clicked) => search_for_input(button_clicked), 500); 
+const processChange = debounce(
+  (buttonClicked) => searchForInput(),
+  500
+);
