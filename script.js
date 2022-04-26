@@ -6,6 +6,7 @@ let filterType = "all";
 let isSplashScreenOn = true;
 let isDomLoaded = false;
 
+
 document.addEventListener("DOMContentLoaded", () => {
   isDomLoaded = true;
   if (isSplashScreenOn === false) {
@@ -72,6 +73,9 @@ searchButton.addEventListener("click", () => {
 
     // show the searchField element
     searchField.style.display = "inline-flex";
+
+    document.activeElement.blur;
+    searchField.focus();  
 
     searchField.addEventListener("keydown", () => processChange());
   } else {
